@@ -1,0 +1,4 @@
+(executable
+ (public_name dynan)
+ (name main)
+ (libraries dynan))
