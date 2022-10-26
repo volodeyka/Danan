@@ -62,7 +62,7 @@ let rec q (g : gr) (xs : Spec.t list) : Spec.nt list =
 let lambda (g : gr) (x : Spec.t) : Spec.nt list = 
   q g [x]
 
-let sigma (g : gr) (x : Spec.t) (bs : Spec.nt list) : Spec.nt list = 
+let delta (g : gr) (x : Spec.t) (bs : Spec.nt list) : Spec.nt list = 
   NTMap.fold (
     fun nt ps l ->
       if (ProdSet.exists (fun (_, s) -> 
