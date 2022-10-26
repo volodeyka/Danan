@@ -8,8 +8,9 @@ module Make (Spec : SPEC) :
 module AMap      = Map.Make(struct type t = Spec.t let compare = Spec.compare_t end)
 
 
-type t = int AMap.t
+type t    = int    AMap.t
 type word = Spec.t list
+type pids = t      list
 
 let to_letter g (v : t) : Spec.t = 
   let rec to_letter (v : (Spec.t * int) list) (i : int) = 
@@ -25,5 +26,7 @@ let repr (x : word) : t =
     | []     -> v
     | a :: x -> AMap.update a (Option.map ((+) 1)) v |> repr x
   in repr x AMap.empty
+
+let construct_pids (w : word) : pids = failwith "unimpl"
 
 end
