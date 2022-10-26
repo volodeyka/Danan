@@ -8,6 +8,7 @@ module SpecG     = Bnf_spec.Bnf.Spec
 module BnfVector = Vector      .Make (SpecG)
 module BnfGr     = Grammar_util.Make (SpecG)
 module Bnf       = Cfg.Cfg_impl.Make (SpecG)
+module IntMap    = Map         .Make(Int)
 
 module SpecC : (Ideals_intf.SPEC with type letter = SpecG.t) = struct
   type letter   = SpecG.t 
@@ -48,9 +49,7 @@ let y = BnfVector.to_letter gr.alphabet
 
 let w : BnfVector.word = ["x"; "y"]
 
-(* module IntMap = Map.Make(Int) *)
-
-let s : BnfIdeals.seq = BnfIdeals.IntMap.empty
+let s : BnfIdeals.seq = IntMap.empty
 
 let _ = BnfIdeals.of_word w cr
 let _ = BnfIdeals.seq_to_q s gr
