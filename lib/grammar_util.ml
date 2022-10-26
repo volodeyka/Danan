@@ -11,7 +11,7 @@ open MyCfg
 
 type alphabet = (int, Spec.t) Hashtbl.t  
 
-type gr = {
+type t = {
   g        : grammar;
   repr     : ProdSet.t NTMap.t;
   alphabet : alphabet
@@ -26,7 +26,7 @@ let add_aphabet (a : alphabet) (g : grammar) =
     (fun i x -> Hashtbl.add a i x)
     (g |> ts_in_grammar |> TSet.elements) in ()
 
-let from_grammar (gr : grammar) : gr =
+let from_grammar (gr : grammar) : t =
   {
     g        = gr;
     repr     = grammar_contents gr;
@@ -36,7 +36,7 @@ let from_grammar (gr : grammar) : gr =
       h
   }
 
-let rec q (g : gr) (xs : Spec.t list) : Spec.nt list = 
+let rec q (g : t) (xs : Spec.t list) : Spec.nt list = 
   match xs with  
   | [x]  -> 
     NTMap.fold 
@@ -59,10 +59,10 @@ let rec q (g : gr) (xs : Spec.t list) : Spec.nt list =
       ) g.repr []
   | _    -> failwith "???"
 
-let lambda (g : gr) (x : Spec.t) : Spec.nt list = 
+let lambda (g : t) (x : Spec.t) : Spec.nt list = 
   q g [x]
 
-let delta (g : gr) (x : Spec.t) (bs : Spec.nt list) : Spec.nt list = 
+let delta (g : t) (x : Spec.t) (bs : Spec.nt list) : Spec.nt list = 
   NTMap.fold (
     fun nt ps l ->
       if (ProdSet.exists (fun (_, s) -> 

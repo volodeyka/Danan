@@ -12,14 +12,14 @@ module type GRAMMAR = sig
 
   type word = Spec.t list
 
-  type gr = {
+  type t = {
     g        : grammar;
     repr     : ProdSet.t NTMap.t;
     alphabet : alphabet
   }
 
-  val from_grammar : grammar -> gr
-  val q : gr -> word -> Spec.nt list
-  val lambda : gr -> Spec.t -> Spec.nt list
-  val delta : gr -> Spec.t -> Spec.nt list -> Spec.nt list
+  val from_grammar : grammar -> t
+  val q : t -> word -> Spec.nt list
+  val lambda : t -> Spec.t -> Spec.nt list
+  val delta : t -> Spec.t -> Spec.nt list -> Spec.nt list
 end
