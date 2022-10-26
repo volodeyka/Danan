@@ -1,2 +1,4 @@
-(library
- (name dynan))
+(library (name dynan)
+ (public_name dynan)
+ (libraries core cfg)
+ (flags :standard -rectypes))

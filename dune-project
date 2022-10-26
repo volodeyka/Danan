@@ -1,6 +1,6 @@
 (lang dune 3.4)
-
 (name dynan)
+(using menhir 2.1)
 
 (generate_opam_files true)
 
@@ -19,7 +19,10 @@
  (name dynan)
  (synopsis "A short synopsis")
  (description "A longer description")
- (depends ocaml dune)
+ (depends 
+   (ocaml (>= 4.12.0)) 
+   dune
+   (cfg (>= 2.3.0)))
  (tags
   (topics "to describe" your project)))
 
