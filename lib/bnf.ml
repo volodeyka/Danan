@@ -1,6 +1,6 @@
 open Cfg
 (* open Bnf_spec *)
-open Grammar_intf
+(* open Grammar_intf *)
 
 module BnfVector = Vector.Make (Bnf_spec.Bnf.Spec)
 module BnfGr     = Grammar_util.Make  (Bnf_spec.Bnf.Spec)

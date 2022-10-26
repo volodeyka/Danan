@@ -1,6 +1,0 @@
-description = ""
-requires = "cfg core"
-archive(byte) = "dynan.cma"
-archive(native) = "dynan.cmxa"
-plugin(byte) = "dynan.cma"
-plugin(native) = "dynan.cmxs"
