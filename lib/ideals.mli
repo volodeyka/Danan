@@ -5,4 +5,5 @@ module Make (SpecG : Cfg.Cfg_intf.SPEC) (SpecC : Ideals_intf.SPEC with type lett
     with module SpecG  := SpecG
     with module Vec    := Vector      .Make(SpecG)
     with module Gr     := Grammar_util.Make(SpecG)
-    with module IntMap := Map         .Make(Int))
+    (* with module IntMap := Map         .Make(Int) *)
+  )

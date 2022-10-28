@@ -14,12 +14,12 @@ module type IDEALS = sig
   module SpecG   : (Cfg_intf.SPEC with type t = SpecC.letter)
 
   module Vec     : (VECTOR with type letter := SpecC.letter)
-  module IntMap  : (Map.S with type key = int)
+  (* module IntMap  : (Map.S with type key = int) *)
 
   module Gr      : (Grammar_intf.GRAMMAR with module Spec := SpecG)
 
   type t   = Vec.t list
-  type seq = t IntMap.t
+  type seq = t list
 
   val of_word  : Vec.word -> SpecC.conc_rel -> t
 
