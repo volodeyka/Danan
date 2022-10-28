@@ -19,7 +19,8 @@ module type IDEALS = sig
   module Gr      : (Grammar_intf.GRAMMAR with module Spec := SpecG)
 
   type t   = Vec.t list
-  type seq = t list
+  type max_events = SpecG.t list
+  type seq        = (Vec.t * max_events) list list
 
   val of_word  : Vec.word -> SpecC.conc_rel -> t
 

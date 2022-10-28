@@ -25,9 +25,9 @@ module Make (SpecG : Cfg_intf.SPEC) (SpecC : Ideals_intf.SPEC with type letter =
       let qv   = Gr.lambda gr word           in
       VecMap.add v qv x
 
-  (* let rec ids_to_q  *)
+  (* let rec ids_to_q () *)
 
-  let seq_to_q (s : seq) (gr : Gr.t) (ns : SpecG.nt list) : SpecG.nt list = 
+  let seq_to_q (s : seq) (gr : Gr.t) : SpecG.nt list = 
     let word_repr =
       match Base.List.last s with
       | Some [(v, _)] -> v 

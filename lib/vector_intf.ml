@@ -10,5 +10,6 @@ module type VECTOR = sig
 
   val to_letter      : alphabet -> t -> letter
   val of_word        : word -> t
+  val delete         : letter -> t -> t
 
 end

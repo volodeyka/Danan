@@ -25,4 +25,7 @@ let of_word (x : word) : t =
     | a :: x -> AMap.update a (Option.map ((+) 1)) v |> repr x
   in repr x AMap.empty
 
+let delete (a : Spec.t) (v : t) = 
+  AMap.update a (Option.map ((-) 1)) v
+
 end
