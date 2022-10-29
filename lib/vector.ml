@@ -28,4 +28,12 @@ let of_word (x : word) : t =
 let delete (a : Spec.t) (v : t) = 
   AMap.update a (Option.map ((-) 1)) v
 
+let union2 : t -> t -> t = AMap.merge (fun _ -> Base.Option.map2 ~f:Base.Int.max)
+
+let union (v : t list) : t = 
+  match v with 
+  | []   -> failwith "emply union"
+  | v :: vs -> List.fold_left union2 v vs
+
+
 end

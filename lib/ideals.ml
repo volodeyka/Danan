@@ -13,7 +13,7 @@ module Make (SpecG : Cfg_intf.SPEC) (SpecC : Ideals_intf.SPEC with type letter =
   type p          = (Vec.t * max_events) list
 
   let of_word  : Vec.word -> SpecC.conc_rel -> t = failwith "unimplemented"
-
+  
   let to_seq   : t -> SpecC.alpha -> seq         = failwith "unimplemented"
 
   type x = SpecG.nt list VecMap.t
