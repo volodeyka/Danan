@@ -2,9 +2,7 @@ module type VECTOR = sig
 
   type letter
 
-  module AMap  : (Map.S with type key = letter)
-
-  type t        = int    AMap.t
+  type t
   type word     = letter list
   type alphabet = (int, letter) Hashtbl.t
 
