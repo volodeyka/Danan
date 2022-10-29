@@ -49,7 +49,7 @@ let y = BnfVector.to_letter gr.alphabet
 
 let w : BnfVector.word = ["x"; "y"]
 
-let s : BnfIdeals.seq = IntMap.empty
+let s : BnfIdeals.seq = []
 
 let _ = BnfIdeals.of_word w cr
 let _ = BnfIdeals.seq_to_q s gr
