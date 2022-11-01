@@ -6,15 +6,38 @@ module Make (SpecG : Cfg_intf.SPEC) (SpecC : Ideals_intf.SPEC with type letter =
   module Cgf    = Cfg_impl    .Make(SpecG)
   module Gr     = Grammar_util.Make(SpecG)
   module VecMap = Map         .Make(struct type t = Vec.t let compare = compare end)
+  module LMap   = Map         .Make(struct type t = SpecG.t let compare = SpecG.compare_t end)
 
   type t          = Vec.t   list
   type max_events = SpecG.t list
   type seq        = (Vec.t * max_events) list list
   type p          = (Vec.t * max_events) list
+  type clk_vec    = Vec.t LMap.t
 
-  let of_word  : Vec.word -> SpecC.conc_rel -> t = failwith "unimplemented"
-  
-  let to_seq   : t -> SpecC.alpha -> seq         = failwith "unimplemented"
+  let to_string (ideals : t) : string = 
+    let ideal_to_string str ideal = 
+      Vec.to_string ideal ^ "x\n" ^ str
+    in
+    (Base.List.length ideals) |> print_int;
+    Base.List.fold ideals ~init:"" ~f:ideal_to_string
+
+    
+  let of_word (run : Vec.word) (conc_rel : SpecC.conc_rel) : t = 
+    let update ((ideals : t), (clok_vec : clk_vec)) event_i = 
+      let check_event event_j event_j_vec new_vec = 
+        if conc_rel event_i event_j then
+          new_vec
+        else
+          Vec.union [new_vec; event_j_vec]
+      in 
+      let new_vec = (LMap.fold check_event clok_vec Vec.empty) |>
+                    (Vec.increment event_i) in
+      let clok_vec = LMap.update event_i (fun x -> Some(new_vec)) clok_vec in
+      (new_vec :: ideals, clok_vec)
+    in Base.List.fold run ~init:([], LMap.empty) ~f:update |> fst
+    
+
+  (* let to_seq   : t -> SpecC.alpha -> seq         = failwith "unimplemented" *)
 
   type x = SpecG.nt list VecMap.t
 

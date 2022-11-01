@@ -24,6 +24,8 @@ module type IDEALS = sig
 
   val of_word  : Vec.word -> SpecC.conc_rel -> t
 
-  val to_seq   : t -> SpecC.alpha -> seq
+  (* val to_seq   : t -> SpecC.alpha -> seq *)
   val seq_to_q : seq -> Gr.t -> SpecG.nt list
+
+  val to_string : t -> string
 end

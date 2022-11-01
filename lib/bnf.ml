@@ -40,19 +40,29 @@ let gr_ab : Bnf.grammar =
   "A" --> "a"  @@
   Bnf.empty
 
-let cr : SpecC.conc_rel = fun _ _ -> false
+let rec cr : SpecC.conc_rel = fun x y ->
+  match (x, y) with
+  | _ when x > y -> cr y x
+  | ("b" , "c") | ("b" , "e") | ("d", "e") -> true
+  | _ -> false
 let a  : SpecC.alpha    = 0
 
 let gr = BnfGr.from_grammar gr_ab
 
 let y = BnfVector.to_letter gr.alphabet
 
-let w : BnfVector.word = ["x"; "y"]
+let w : BnfVector.word = ["a"; "b"; "c"; "d"; "e"; "a"; "c"]
 
 let s : BnfIdeals.seq = []
 
-let _ = BnfIdeals.of_word w cr
-let _ = BnfIdeals.seq_to_q s gr
+let ideals = BnfIdeals.of_word w cr
+
+let print_ideals ids = BnfIdeals.to_string ids |> print_endline
+
+let () = 
+  print_string "ideals:\n";
+  print_ideals ideals
+(* let _ = BnfIdeals.seq_to_q s gr *)
 
 
 
