@@ -14,6 +14,8 @@ module SpecC : (Ideals_intf.SPEC with type letter = SpecG.t) = struct
   type letter   = SpecG.t 
   type conc_rel = letter -> letter -> bool
   type alpha    = int
+  
+  let pp_letter = fun l -> l
 end
 
 module BnfIdeals = Ideals.Make(SpecG)(SpecC)

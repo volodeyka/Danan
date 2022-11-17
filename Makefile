@@ -10,8 +10,12 @@ default: all test
 # The flag "--profile release" is passed to avoid warnings-as-errors
 
 all:
-	dune build --profile release @install
+	dune build --profile release @install 
+	@test -L main.native || ln -s _build/install/default/bin/main.native main.native
 
+test: main.native
+	./main.native --test
+	
 # Clean up
 clean:
 # Remove files produced by dune.

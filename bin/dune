@@ -1,5 +1,6 @@
 (executable
- (public_name dynan)
  (name main)
+ (public_name main.native)
  (libraries dynan)
+ (package dynan)
  (flags -rectypes))

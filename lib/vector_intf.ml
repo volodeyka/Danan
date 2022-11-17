@@ -5,7 +5,8 @@ module type VECTOR = sig
   type t
   type word     = letter list
   type alphabet = (int, letter) Hashtbl.t
-
+  val compare        : t -> t -> int
+  val equal          : t -> t -> bool
   val increment      : letter -> t -> t
   val to_string      : t -> string
   val empty          : t

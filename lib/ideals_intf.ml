@@ -5,6 +5,7 @@ module type SPEC = sig
 
   type conc_rel = letter -> letter -> bool
   type alpha    = int
+  val pp_letter : letter -> string
 
 end
 

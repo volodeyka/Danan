@@ -1,4 +1,5 @@
 (library (name dynan)
  (public_name dynan)
- (libraries core cfg)
+ (libraries core cfg containers containers-data random-generator qcheck)
+ (preprocess (pps ppx_deriving_qcheck))
  (flags :standard -rectypes))

@@ -12,6 +12,9 @@ type pids     = t      list
 
 let empty : t = AMap.empty
 
+let compare : t -> t -> int = AMap.compare Int.compare
+let equal   : t -> t -> bool = AMap.equal   Int.equal
+
 let increment (a : Spec.t) (v : t) : t = 
   AMap.update a (fun x -> Some((Option.value ~default:0 x) + 1)) v
 
@@ -44,6 +47,7 @@ let union (v : t list) : t =
   match v with 
   | []   -> failwith "emply union"
   | v :: vs -> List.fold_left union2 v vs
+
 
 
 end
