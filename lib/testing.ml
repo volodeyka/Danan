@@ -1,9 +1,10 @@
 open Cfg
-open Naive_mltp
+(* open mltp *)
 open Generator
 open Specs
 open RandGen
-open String_Naive_mltp
+open Mltp.Naive
+open Mltp.Rels
 
 let word1 = ["o"; "x"; "c"; "o"; "x"; "c"]
 let word2 = ["o"; "x"; "o"; "c"; "x"; "c"]

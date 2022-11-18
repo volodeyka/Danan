@@ -59,8 +59,7 @@ let open_close_check c : check =
   ]
 
 (* let test1 =if true then Printf.printf "\n !!! \n";  traverse true word1 c1 open_close_check true *)
-let check = fun w c -> traverse false w c (open_close_check c) true
-
+let check = fun w c -> traverse w c (open_close_check c) true
 
 
 (* let x = random_patterns_string ~rep:5 4 ~pattern:["o5"; "c"] *)

@@ -27,3 +27,22 @@ let all_sets p w (c1 : char) (c2 : char) =
   all_between p w c1 c2 >>| fun x ->
   all_between p w c1 c2 >>| fun y ->
     [x ; y]
+
+let rec subsets_n (a : int) (l : 'a list) : 'a list list = 
+  match l, a with 
+  | [], _ -> [[]] 
+  | h :: t, a ->
+    let subsets  = subsets_n a t in
+    let subsets' = List.filter (fun s -> List.length s < a) subsets in 
+    let subsets' = List.map (List.cons h) subsets' in 
+    subsets' @ subsets
+
+
+  (* let rec subsets_n (l : 'a list) (acc : 'a list list) = 
+    match l with 
+    | [] ->  acc 
+    | x :: l -> 
+      let 
+      let acc = failwith "" in 
+      subsets_n l acc
+  in subsets_n l [[]] *)

@@ -16,6 +16,7 @@ module type ACC  = sig
   val pp_elt      : elt -> string
   val pp_t        : t -> string
   val exists      : (elt -> bool) -> t -> bool
+  val union       : t -> t -> t
   
 end
 
@@ -31,7 +32,7 @@ module Make (Spec : Ideals_intf.SPEC) (Acc : ACC with type elt = Spec.letter) (S
   type acc_set = Acc.t LMap.t
   type word    = Spec.letter list
 
-  let update_dep (c : Spec.conc_rel) (base : Spec.letter) : Acc.t -> Acc.t = 
+  let upd_acc_dep (c : Spec.conc_rel) (base : Spec.letter) : Acc.t -> Acc.t = 
     fun accs -> 
       if Acc.exists (fun x -> not @@ c base x) accs then 
         Acc.add base accs
@@ -45,25 +46,47 @@ module Make (Spec : Ideals_intf.SPEC) (Acc : ACC with type elt = Spec.letter) (S
         | None   -> ""
         | Some s -> pp_l ^ Acc.pp_t acc ^ "\n" ^ str) accs ""
 
-  let traverse 
-  (verbose : bool)
-  (w : word) 
-  (c   : Spec.conc_rel)
-  (upd : Spec.letter -> acc_set -> Show.t -> Show.t)
-  (def : Show.t)
-    : Show.t = 
-    let rec trav (x : Show.t) (w : word) (accs : acc_set) = 
+  let traverse ?verbose
+    (w       : word) 
+    (c       : Spec.conc_rel)
+    (upd_ans : Spec.letter -> acc_set -> Show.t -> Show.t)
+    (def     : Show.t)  : Show.t = 
+    let rec traverse (x : Show.t) (w : word) (accs : acc_set) = 
       match w with 
       | []     -> x
       | e :: w -> 
-        (if verbose then Printf.printf "%s%!\n" @@ Show.pp x);
-        (if verbose then Printf.printf "%s%!\n" @@ pp_acc_set accs);
-        let x    = upd e accs x in
+        (if verbose = Some true then Printf.printf "%s%!\n" @@ Show.pp x);
+        (if verbose = Some true then Printf.printf "%s%!\n" @@ pp_acc_set accs);
+        let x    = upd_ans e accs x in
         let accs = 
-          LMap.map (update_dep c e) accs |>
+          LMap.map (upd_acc_dep c e) accs |>
           LMap.add e (Acc.singleton e) 
-        in trav x w accs
-      in trav def w LMap.empty
+        in traverse x w accs
+      in traverse def w LMap.empty
+
+  let upd_dep
+    (c : Spec.conc_rel) 
+    (base : Spec.letter) : Spec.letter -> Acc.t -> Acc.t -> Acc.t = 
+    fun l accs -> 
+      if not @@ c base l then 
+        Acc.union accs
+      else Base.Fn.id
+
+
+  let traverse_bw ?verbose
+    (w       : word)
+    (c       : Spec.conc_rel)
+    (upd_ans : Spec.letter -> Acc.t -> Show.t -> Show.t)
+    (def : Show.t) : Show.t = 
+    let rec traverse (x : Show.t) (w : word) (accs : acc_set) =
+      match w with 
+      | []     -> x
+      | e :: w -> 
+        let acc  = LMap.fold (upd_dep c e) accs Acc.empty |> Acc.add e in
+        let accs = LMap.add e acc accs                                 in
+        let x    = upd_ans e acc x                                     in
+          traverse x w accs
+    in traverse def w LMap.empty
 end
 
 module AfterSet : (ACC with type elt = string) = struct
@@ -77,9 +100,47 @@ module AfterSet : (ACC with type elt = string) = struct
   
 end
 
+module VectorClock_Make (SpecG : Cfg.Cfg_intf.SPEC) : 
+  (ACC with type elt = SpecG.t
+       and  type t = Vector.Make (SpecG).t) = struct
+
+  module Vec = Vector.Make (SpecG)
+
+  type t = Vec.t
+  type elt = SpecG.t
+
+  let add = Vec.increment
+  let union = fun a b -> Vec.union [a; b]
+
+  let exists p v = List.exists p (Vec.elements v)
+
+  let pp_t v = ""
+
+  let empty = Vec.empty
+  let mem e v = List.mem e @@ Vec.elements v
+
+  let singleton e = Vec.of_word [e]
+
+  let compare_elt : elt -> elt -> int = SpecG.compare_t
+  let pp_elt      = fun _ -> ""
+
+  let pp_elt_ws e = pp_elt e ^ " "
+  
+end
+
 module BoolS : (Show with type t = bool) = struct
   type t = bool
   let pp = fun t -> if t then "true" else "false"
 end
 
-module AfterSetCheck = Make (Specs.SpecC) (AfterSet) (BoolS)
+open Specs
+
+(* module PIDsS (Vec : Vector_intf.VECTOR) : (Show with type t = Vec.t StrMap.t) = struct
+  type t = Vec.t StrMap.t
+
+  let pp = fun t -> ""
+end *)
+
+module AfterSetCheck    = Make (SpecC) (AfterSet)    (BoolS)
+module VectorClockCheck (SpecC : Ideals_intf.SPEC) (SpecG : Cfg.Cfg_intf.SPEC with type t = SpecC.letter) =
+  Make (SpecC) (VectorClock_Make (SpecG))

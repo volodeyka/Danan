@@ -8,7 +8,8 @@ module SpecG     = Bnf_spec.Bnf.Spec
 module BnfVector = Vector      .Make (SpecG)
 module BnfGr     = Grammar_util.Make (SpecG)
 module Bnf       = Cfg.Cfg_impl.Make (SpecG)
-module IntMap    = Map         .Make(Int)
+module IntMap    = Map         .Make (Int)
+module StrMap    = Map         .Make (String)
 
 module SpecC : (Ideals_intf.SPEC with type letter = SpecG.t) = struct
   type letter   = SpecG.t 

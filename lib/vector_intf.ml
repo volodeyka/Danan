@@ -15,4 +15,8 @@ module type VECTOR = sig
   val delete         : letter -> t -> t
   val union          : t list -> t
 
+  type max_vector = First | Second | NotComp
+  val union_max      : t -> t -> t * max_vector
+  val elements       : t -> letter list
+
 end

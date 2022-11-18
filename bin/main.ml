@@ -2,7 +2,7 @@ open Dynan
 open Testing
 open Arg
 open OpenClose
-open Naive_mltp
+(* open Naive_mltp *)
 
 exception Ran_tests
 (* let suite = ref (Studenttests.provided_tests @ Gradedtests.graded_tests) *)
@@ -10,7 +10,7 @@ exception Ran_tests
 let test = test_eqf  
   'a' 'f'
   ~f1:(fun c w -> OpenClose.check w c)
-  ~f2:(fun c w -> not @@ String_Naive_mltp.violate c w check_oc_p)
+  ~f2:(fun c w -> not @@ Mltp.Naive.violate c w check_oc_p)
   ~test_number:    100
   ~strings_number: 10
   ~string_size:    4
